@@ -1,22 +1,31 @@
 
 
-
+struct Point;
+struct Vector;
+struct Ray;
+struct Sphere;
 
 struct Point
 {
   Point(double x, double y, double z);
   
+  Point(Vector Vec);
+
   ~Point();
 
-  bool operator==(Point other);
+  bool operator==(Point Other);
   
-  Point operator+(Point other);
+  Point operator+(Point Other);
   
-  void operator+=(Point other);
+  void operator+=(Point Other);
 
-  Point operator-(Point other);
+  Point operator-(Point Other);
 
-  void operator-=(Point other);
+  void operator-=(Point Other);
+
+  Point Translate(Vector Shift);
+
+  Vector FromThisToThat(Point That);
 
   double x, y, z;
 };
@@ -25,17 +34,31 @@ struct Vector
 {
   Vector(double x, double y, double z);
 
+  Vector(Point Pt);
+
   ~Vector();
 
-  bool operator==(Vector other);
+  bool operator==(Vector Other);
 
-  Vector operator+(Vector other);
+  Vector operator+(Vector Other);
 
-  void operator+=(Vector other);
+  void operator+=(Vector Other);
 
-  Vector operator-(Vector other);
+  Vector operator-(Vector Other);
 
-  void operator-=(Vector other);
+  void operator-=(Vector Other);
+
+  Vector operator*(double Scalar);
+
+  void operator*=(double Scalar);
+
+  Vector Scale(double Scalar);
+
+  double Dot(Vector Other);
+
+  double Length();
+
+  Vector Normalize();
 
   double x, y, z;
 };
@@ -50,7 +73,7 @@ struct Ray
 
   void Move(double x = 0, double y = 0, double z = 0);
 
-  bool operator==(Ray other);
+  bool operator==(Ray Other);
 
   Point Location;
   Vector Direction;
@@ -66,7 +89,7 @@ struct Sphere
 
   void Move(double x = 0, double y = 0, double z = 0);
 
-  bool operator==(Sphere other);
+  bool operator==(Sphere Other);
 
   Point Center;
   double Radius;

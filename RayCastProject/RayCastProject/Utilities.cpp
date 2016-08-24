@@ -1,4 +1,5 @@
 #include "Utilities.h"
+#include <cmath>
 
 //-------------------------------------------------------------------
 // Point ------------------------------------------------------------
@@ -10,37 +11,54 @@ Point::Point(double x, double y, double z)
 {
 }
 
+Point::Point(Vector Vec)
+  : x(Vec.x),
+  y(Vec.y),
+  z(Vec.z)
+{
+}
+
 Point::~Point()
 {
 }
 
-bool Point::operator==(Point other)
+bool Point::operator==(Point Other)
 {
-  return x == other.x && y == other.y && z == other.z;
+  return x == Other.x && y == Other.y && z == Other.z;
 }
 
-Point Point::operator+(Point other)
+Point Point::operator+(Point Other)
 {
-  return Point(x + other.x, y + other.y, z + other.z);
+  return Point(x + Other.x, y + Other.y, z + Other.z);
 }
 
-void Point::operator+=(Point other)
+void Point::operator+=(Point Other)
 {
-  x += other.x;
-  y += other.y;
-  z += other.z;
+  x += Other.x;
+  y += Other.y;
+  z += Other.z;
 }
 
-Point Point::operator-(Point other)
+Point Point::operator-(Point Other)
 {
-  return Point(x - other.x, y - other.y, z - other.z);
+  return Point(x - Other.x, y - Other.y, z - Other.z);
 }
 
-void Point::operator-=(Point other)
+void Point::operator-=(Point Other)
 {
-  x -= other.x;
-  y -= other.y;
-  z -= other.z;
+  x -= Other.x;
+  y -= Other.y;
+  z -= Other.z;
+}
+
+Point Point::Translate(Vector Shift)
+{
+  return Point(x + Shift.x, y + Shift.y, z + Shift.z);
+}
+
+Vector Point::FromThisToThat(Point That)
+{
+  return Vector(That - *this);
 }
 
 //-------------------------------------------------------------------
@@ -53,37 +71,72 @@ Vector::Vector(double x, double y, double z)
 {
 }
 
+Vector::Vector(Point Pt)
+  : x(Pt.x),
+  y(Pt.y),
+  z(Pt.z)
+{
+}
+
 Vector::~Vector()
 {
 }
 
-bool Vector::operator==(Vector other)
+bool Vector::operator==(Vector Other)
 {
-  return x == other.x && y == other.y && z == other.z;
+  return x == Other.x && y == Other.y && z == Other.z;
 }
 
-Vector Vector::operator+(Vector other)
+Vector Vector::operator+(Vector Other)
 {
-  return Vector(x + other.x, y + other.y, z + other.z);
+  return Vector(x + Other.x, y + Other.y, z + Other.z);
 }
 
-void Vector::operator+=(Vector other)
+void Vector::operator+=(Vector Other)
 {
-  x += other.x;
-  y += other.y;
-  z += other.z;
+  x += Other.x;
+  y += Other.y;
+  z += Other.z;
 }
 
-Vector Vector::operator-(Vector other)
+Vector Vector::operator-(Vector Other)
 {
-  return Vector(x - other.x, y - other.y, z - other.z);
+  return Vector(x - Other.x, y - Other.y, z - Other.z);
 }
 
-void Vector::operator-=(Vector other)
+void Vector::operator-=(Vector Other)
 {
-  x -= other.x;
-  y -= other.y;
-  z -= other.z;
+  x -= Other.x;
+  y -= Other.y;
+  z -= Other.z;
+} 
+
+Vector Vector::operator*(double Scalar)
+{
+  return Vector(x * Scalar, y * Scalar, z * Scalar);
+}
+
+void Vector::operator*=(double Scalar)
+{
+  x *= Scalar;
+  y *= Scalar;
+  z *= Scalar;
+}
+
+double Vector::Dot(Vector Other)
+{
+  return x * Other.x + y * Other.y + z * Other.z;
+}
+
+double Vector::Length()
+{
+  return std::sqrt(x * x + y * y + z * z);
+}
+
+Vector Vector::Normalize()
+{
+  double len = this->Length();
+  return Vector(x / len, y / len, z / len);
 }
 
 //-------------------------------------------------------------------
@@ -104,14 +157,14 @@ void Ray::Move(Point shift)
   Location += shift;
 }
 
-void Ray::Move(double x = 0, double y = 0, double z = 0)
+void Ray::Move(double x, double y, double z)
 {
   Location += Point(x, y, z);
 }
 
-bool Ray::operator==(Ray other)
+bool Ray::operator==(Ray Other)
 {
-  return Location == other.Location && Direction == other.Direction;
+  return Location == Other.Location && Direction == Other.Direction;
 }
 
 //-------------------------------------------------------------------
@@ -132,12 +185,12 @@ void Sphere::Move(Point shift)
   Center += shift;
 }
 
-void Sphere::Move(double x = 0, double y = 0, double z = 0)
+void Sphere::Move(double x, double y, double z)
 {
   Center += Point(x, y, z);
 }
 
-bool Sphere::operator==(Sphere other)
+bool Sphere::operator==(Sphere Other)
 {
-  return Center == other.Center && Radius == other.Radius;
+  return Center == Other.Center && Radius == Other.Radius;
 }
