@@ -23,7 +23,11 @@ struct Point
 
   void operator-=(Point Other);
 
+  void Copy(Point Other);
+
   Point Translate(Vector Shift);
+
+  Vector Difference(Point Other);
 
   Vector FromThisToThat(Point That);
 
@@ -55,6 +59,8 @@ struct Vector
   Vector Scale(double Scalar);
 
   double Dot(Vector Other);
+
+  double Dot();
 
   double Length();
 

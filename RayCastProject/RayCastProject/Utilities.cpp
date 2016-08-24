@@ -51,9 +51,21 @@ void Point::operator-=(Point Other)
   z -= Other.z;
 }
 
+void Point::Copy(Point Other)
+{
+  x = Other.x;
+  y = Other.y;
+  z = Other.z;
+}
+
 Point Point::Translate(Vector Shift)
 {
   return Point(x + Shift.x, y + Shift.y, z + Shift.z);
+}
+
+Vector Point::Difference(Point Other)
+{
+  return Vector(*this - Other);
 }
 
 Vector Point::FromThisToThat(Point That)
@@ -126,6 +138,11 @@ void Vector::operator*=(double Scalar)
 double Vector::Dot(Vector Other)
 {
   return x * Other.x + y * Other.y + z * Other.z;
+}
+
+double Vector::Dot()
+{
+  return x * x + y * y + z * z;
 }
 
 double Vector::Length()
