@@ -1,5 +1,8 @@
+#pragma once
+
 #include "Utilities.h"
 #include <opencv2/core.hpp>
+#include <vector>
 
 class Frame
 {
@@ -15,16 +18,16 @@ public:
     
   ~Frame();
 
-  static bool CastRay(std::vector<SpherePoint> SphereList, Ray r);
+  static bool CastRay(std::vector<Sphere> SphereList, Ray r);
 
-  void CastAllRays(std::vector<SpherePoint> SphereList);
+  void CastAllRays(std::vector<Sphere> SphereList);
   
-  void SetCameraPosition();
-  void SetCameraDirection();
-  void SetFrameDistance();
-  void SetWidth();
-  void SetHeight();
-  void SetResolution();
+  void SetCameraPosition(Point Position);
+  void SetCameraDirection(Ray Direction);
+  void SetFrameDistance(double Distance);
+  void SetWidth(double Width);
+  void SetHeight(double Height);
+  void SetResolution(cv::Size Resolution);
 
   Point GetCameraPosition();
   Ray GetCameraDirection();
@@ -47,3 +50,38 @@ private:
   cv::Size Resolution; // Resolution of resulting image
   cv::Mat Image;
 };
+
+inline Point Frame::GetCameraPosition()
+{
+  return CameraPosition;
+}
+
+inline Ray Frame::GetCameraDirection()
+{
+  return CameraDirection;
+}
+
+inline double Frame::GetFrameDistance()
+{
+  return FrameDistance;
+}
+
+inline double Frame::GetWidth()
+{
+  return Width;
+}
+
+inline double Frame::GetHeight()
+{
+  return Height;
+}
+
+inline cv::Size Frame::GetResolution()
+{
+  return Resolution;
+}
+
+inline cv::Mat Frame::GetImage()
+{
+  return Image;
+}
