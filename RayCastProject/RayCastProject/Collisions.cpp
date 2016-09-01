@@ -1,15 +1,7 @@
 #include "Collisions.h"
 
 
-SpherePoint::SpherePoint(Sphere s, Point p)
-  : s(s),
-  p(p)
-{
-}
 
-SpherePoint::~SpherePoint()
-{
-}
 
 int SphereIntersectionPoint(Ray r, Sphere s, Point& p)
 {
@@ -67,3 +59,4 @@ Vector SphereNormalAtPoint(Sphere s, Point p)
   // from the center of the sphere to the point
   return p.Difference(s.Center).Normalize();
 }
+

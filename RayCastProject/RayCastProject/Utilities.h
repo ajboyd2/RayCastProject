@@ -100,3 +100,13 @@ struct Sphere
   Point Center;
   double Radius;
 };
+
+struct SpherePoint
+{
+  SpherePoint(Sphere s, Point p);
+
+  ~SpherePoint();
+
+  Sphere s;
+  Point p;
+};

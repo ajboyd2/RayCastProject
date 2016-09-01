@@ -211,3 +211,16 @@ bool Sphere::operator==(Sphere Other)
 {
   return Center == Other.Center && Radius == Other.Radius;
 }
+
+//-------------------------------------------------------------------
+// SpherePoint -----------------------------------------------------------
+//-------------------------------------------------------------------
+SpherePoint::SpherePoint(Sphere s, Point p)
+  : s(s),
+  p(p)
+{
+}
+
+SpherePoint::~SpherePoint()
+{
+}
