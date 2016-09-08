@@ -62,6 +62,8 @@ struct Vector
 
   double Dot();
 
+  Vector Cross(Vector Other);
+
   double Length();
 
   Vector Normalize();

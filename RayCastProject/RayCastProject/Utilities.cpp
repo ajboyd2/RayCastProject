@@ -145,6 +145,11 @@ double Vector::Dot()
   return x * x + y * y + z * z;
 }
 
+Vector Vector::Cross(Vector Other)
+{
+  return Vector(y*Other.z - z*Other.y, z*Other.x - x*Other.z, x*Other.y - y*Other.x);
+}
+
 double Vector::Length()
 {
   return std::sqrt(x * x + y * y + z * z);
