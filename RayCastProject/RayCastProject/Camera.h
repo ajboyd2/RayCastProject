@@ -10,6 +10,7 @@ public:
 
   Camera(
     Ray CameraRay,
+    Vector UprightDir,
     double FrameDistance,
     double Width,
     double Height,
@@ -22,12 +23,14 @@ public:
   void Render(std::vector<Sphere> SphereList);
   
   void SetCameraRay(Ray R);
+  void SetUprightDir(Vector Dir);
   void SetFrameDistance(double Distance);
   void SetWidth(double Width);
   void SetHeight(double Height);
   void SetResolution(cv::Size Resolution);
 
   Ray GetCameraRay();
+  Vector GetUprightDir();
   double GetFrameDistance(); 
   double GetWidth();
   double GetHeight();
@@ -39,6 +42,7 @@ private:
 
 
   Ray CameraRay;
+  Vector UprightDir;
   double FrameDistance; // Perpendicular distance from camera to Camera
   // Width and Height of the Camera in units
   double Width;
@@ -50,6 +54,11 @@ private:
 inline Ray Camera::GetCameraRay()
 {
   return CameraRay;
+}
+
+inline Vector Camera::GetUprightDir()
+{
+  return UprightDir;
 }
 
 inline double Camera::GetFrameDistance()
