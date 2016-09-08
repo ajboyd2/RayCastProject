@@ -3,12 +3,12 @@
 
 Camera::Camera(
   Ray CameraRay,
+  Vector UprightDir,
   double FrameDistance,
   double Width,
   double Height,
   cv::Size Resolution)
-  : CameraPosition(CameraPosition),
-  CameraDirection(CameraDirection),
+  : CameraRay(CameraRay),
   FrameDistance(FrameDistance),
   Width(Width),
   Height(Height),
@@ -31,12 +31,21 @@ bool Camera::CastRay(std::vector<Sphere> SphereList, Ray r)
 
 void Camera::Render(std::vector<Sphere> SphereList)
 {
-
+  // Compute upper left corner of frame
+  Point UpperLeftCorner(CameraRay.Location);
+  UpperLeftCorner.Translate(CameraRay.Direction); // Currently in center of frame
+  UpperLeftCorner.Translate(UprightDir.Normalize()*(Height / 2)); // Currently in top center of frame
+  UpperLeftCorner.Translate()
 }
 
 void Camera::SetCameraRay(Ray R)
 {
   CameraRay = R;
+}
+
+void Camera::SetUprightDir(Vector Dir)
+{
+  UprightDir = Dir;
 }
 
 void Camera::SetFrameDistance(double Distance)
