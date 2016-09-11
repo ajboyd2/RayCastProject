@@ -91,6 +91,17 @@ struct Ray
   Vector Direction;
 };
 
+struct Finish
+{
+  Finish(double Ambient);
+
+  ~Finish();
+  
+  bool operator==(Finish Other);
+
+  double Ambient;
+};
+
 struct Sphere
 {
   Sphere(Point cen, double radius, cv::Vec3b col, Finish fin);
@@ -119,13 +130,3 @@ struct SpherePoint
   Point p;
 };
 
-struct Finish
-{
-  Finish(double Ambient);
-
-  ~Finish();
-  
-  bool operator==(Finish Other);
-
-  double Ambient;
-};
