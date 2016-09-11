@@ -35,25 +35,26 @@ void Camera::Render(std::vector<Sphere> SphereList)
 {
   // Compute upper left corner of frame
   Point UpperLeftCorner(CameraRay.Location);
-  UpperLeftCorner = UpperLeftCorner.Translate(CameraRay.Direction); // Currently in center of frame
+  UpperLeftCorner = UpperLeftCorner.Translate(CameraRay.Direction.Normalize() * FrameDistance); // Currently in center of frame
   Vector UpUnit = UprightDir.Normalize();
   UpperLeftCorner = UpperLeftCorner.Translate(UpUnit*(Height / 2)); // Currently in top center of frame
   // Compute the perpendicular, leftward facing vector and move the point to the upper left corner
   Vector LeftUnit = UprightDir.Cross(CameraRay.Direction).Normalize();
   UpperLeftCorner = UpperLeftCorner.Translate(LeftUnit*(Width / 2));
 
-  Vector HorzInc = LeftUnit * (-1 / Width);
-  Vector VertInc = UpUnit * (-1 / Height);
+  Vector HorzInc = LeftUnit * (-1 * Width/ static_cast<double>(Resolution.width)); // Progress to the right
+  Vector VertInc = UpUnit * (-1 * Height/ static_cast<double>(Resolution.height)); // Progress downwards
 
   // Position upper left corner to be in the center of the pixel
   UpperLeftCorner = UpperLeftCorner.Translate((HorzInc * (0.5)) + (VertInc * (0.5)));
 
+  Point PixelLocation(0,0,0);
   // Iterate over the image space and render each occupied pixel
   for (int YPixel = 0; YPixel < Resolution.height; YPixel++)
   {
     for (int XPixel = 0; XPixel < Resolution.width; XPixel++)
     {
-      Point PixelLocation = UpperLeftCorner.Translate((VertInc * YPixel) + (HorzInc * XPixel));
+      PixelLocation = UpperLeftCorner.Translate((VertInc * YPixel) + (HorzInc * XPixel));
       Ray CameraToPixel(CameraRay.Location, CameraRay.Location.FromThisToThat(PixelLocation));
 
       cv::Vec3b PixelValue;
