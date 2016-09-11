@@ -93,13 +93,14 @@ struct Ray
 
 struct Finish
 {
-  Finish(double Ambient);
+  Finish(double Ambient, double Diffuse);
 
   ~Finish();
   
   bool operator==(Finish Other);
 
   double Ambient;
+  double Diffuse;
 };
 
 struct Sphere

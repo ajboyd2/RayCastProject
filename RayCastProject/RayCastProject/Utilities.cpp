@@ -238,8 +238,9 @@ SpherePoint::~SpherePoint()
 //-------------------------------------------------------------------
 // Finish -----------------------------------------------------------
 //-------------------------------------------------------------------
-Finish::Finish(double Ambient)
-  : Ambient(Ambient)
+Finish::Finish(double Ambient, double Diffuse)
+  : Ambient(Ambient),
+  Diffuse(Diffuse)
 {
 }
 
@@ -249,5 +250,5 @@ Finish::~Finish()
 
 bool Finish::operator==(Finish Other)
 {
-  return Ambient == Other.Ambient;
+  return Ambient == Other.Ambient && Diffuse == Other.Diffuse;
 }
