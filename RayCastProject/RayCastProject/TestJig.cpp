@@ -17,7 +17,7 @@ int main()
   SphereList.push_back(Sphere(Point(1, 2, 1), 0.8, cv::Vec3b(40, 180, 40), Finish(0.4, 0.4)));
   SphereList.push_back(Sphere(Point(0, 2, -1), 1.2, cv::Vec3b(0, 100, 200), Finish(0.8, 0.4)));
 
-  Scene MasterScene(SphereList, Point(0, 0, 100), cv::Vec3b(255, 255, 255));
+  Scene MasterScene(SphereList, Point(0, 0, 100), cv::Vec3d(1.0, 1.0, 1.0), cv::Vec3d(1.5, 1.5, 1.5));
 
   Camera Cam(Ray(Point(0, 0, 0), Vector(0, 1, 0)), Vector(0, 0, 1), 2, 3, 3, cv::Size(1280, 1280));
 
