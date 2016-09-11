@@ -113,6 +113,8 @@ struct Sphere
 
   void Move(double x = 0, double y = 0, double z = 0);
 
+  Vector Normal(Point pos);
+
   bool operator==(Sphere Other);
 
   Point Center;

@@ -214,6 +214,11 @@ void Sphere::Move(double x, double y, double z)
   Center += Point(x, y, z);
 }
 
+Vector Sphere::Normal(Point pos)
+{
+  return Center.FromThisToThat(pos).Normalize();
+}
+
 bool Sphere::operator==(Sphere Other)
 {
   return Center == Other.Center && 
