@@ -93,7 +93,7 @@ struct Ray
 
 struct Finish
 {
-  Finish(double Ambient, double Diffuse);
+  Finish(double Ambient, double Diffuse, double Specular, double Roughness);
 
   ~Finish();
   
@@ -101,6 +101,8 @@ struct Finish
 
   double Ambient;
   double Diffuse;
+  double Specular;
+  double Roughness;
 };
 
 struct Sphere

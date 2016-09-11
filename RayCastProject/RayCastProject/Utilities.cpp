@@ -243,9 +243,11 @@ SpherePoint::~SpherePoint()
 //-------------------------------------------------------------------
 // Finish -----------------------------------------------------------
 //-------------------------------------------------------------------
-Finish::Finish(double Ambient, double Diffuse)
+Finish::Finish(double Ambient, double Diffuse, double Specular, double Roughness)
   : Ambient(Ambient),
-  Diffuse(Diffuse)
+  Diffuse(Diffuse),
+  Specular(Specular),
+  Roughness(Roughness)
 {
 }
 
@@ -255,5 +257,8 @@ Finish::~Finish()
 
 bool Finish::operator==(Finish Other)
 {
-  return Ambient == Other.Ambient && Diffuse == Other.Diffuse;
+  return Ambient == Other.Ambient && 
+    Diffuse == Other.Diffuse && 
+    Specular == Other.Specular && 
+    Roughness == Other.Roughness;
 }
