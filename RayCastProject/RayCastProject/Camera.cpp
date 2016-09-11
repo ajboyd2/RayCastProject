@@ -47,7 +47,7 @@ cv::Vec3b Camera::CastRay(Scene scene, Ray r)
     }
   }
 
-  return ReturnColor;
+  return ReturnColor.mul(scene.GetAmbientLightColor());
 }
 
 void Camera::Render(Scene scene)
