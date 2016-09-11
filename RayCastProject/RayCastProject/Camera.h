@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utilities.h"
+#include "Scene.h"
 #include <opencv2/core.hpp>
 #include <vector>
 
@@ -18,9 +19,9 @@ public:
     
   ~Camera();
 
-  static cv::Vec3b CastRay(std::vector<Sphere> SphereList, Ray r);
+  static cv::Vec3b CastRay(Scene scene, Ray r);
 
-  void Render(std::vector<Sphere> SphereList);
+  void Render(Scene scene);
   
   void SetCameraRay(Ray R);
   void SetUprightDir(Vector Dir);

@@ -23,10 +23,10 @@ Camera::~Camera()
 {
 }
 
-cv::Vec3b Camera::CastRay(std::vector<Sphere> SphereList, Ray r)
+cv::Vec3b Camera::CastRay(Scene scene, Ray r)
 {
   std::vector<SpherePoint> Intersections = 
-    FindIntersectionPoints(SphereList, r);
+    FindIntersectionPoints(scene.GetSphereList(), r);
 
   cv::Vec3b ReturnColor(255, 255, 255);
   // If the ray intersected with any of them, find the closest point
@@ -50,7 +50,7 @@ cv::Vec3b Camera::CastRay(std::vector<Sphere> SphereList, Ray r)
   return ReturnColor;
 }
 
-void Camera::Render(std::vector<Sphere> SphereList)
+void Camera::Render(Scene scene)
 {
   // Compute upper left corner of frame
   Point UpperLeftCorner(CameraRay.Location);
@@ -76,7 +76,7 @@ void Camera::Render(std::vector<Sphere> SphereList)
       PixelLocation = UpperLeftCorner.Translate((VertInc * YPixel) + (HorzInc * XPixel));
       Ray CameraToPixel(CameraRay.Location, CameraRay.Location.FromThisToThat(PixelLocation));
 
-      cv::Vec3b PixelValue = CastRay(SphereList, CameraToPixel);
+      cv::Vec3b PixelValue = CastRay(scene, CameraToPixel);
 
       Image.at<cv::Vec3b>(YPixel, XPixel) = PixelValue;
     }
