@@ -1,6 +1,7 @@
 #include "Utilities.h"
 #include "Collisions.h"
 #include "Camera.h"
+#include "Scene.h"
 
 #include <iostream>
 #include <vector>

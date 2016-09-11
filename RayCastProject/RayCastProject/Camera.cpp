@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "Collisions.h"
+#include "Scene.h"
 
 Camera::Camera(
   Ray CameraRay,
