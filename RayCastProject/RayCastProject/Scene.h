@@ -10,7 +10,7 @@ public:
 
   Scene(
     std::vector<Sphere> SphereList,
-    Point(LightPosition),
+    Point LightPosition,
     cv::Vec3b AmbientLightColor);
 
   ~Scene();

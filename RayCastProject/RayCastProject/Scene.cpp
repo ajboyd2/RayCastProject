@@ -1,7 +1,7 @@
 #include "Scene.h"
 
 Scene::Scene(std::vector<Sphere> SphereList,
-  Point(LightPosition),
+  Point LightPosition,
   cv::Vec3b AmbientLightColor)
   : SphereList(SphereList),
   LightPosition(LightPosition),
