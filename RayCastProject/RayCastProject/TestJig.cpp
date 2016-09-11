@@ -19,7 +19,19 @@ int main()
 
   Scene MasterScene(SphereList, Point(0, 0, 100), cv::Vec3d(1.0, 1.0, 1.0), cv::Vec3d(1.5, 1.5, 1.5));
 
-  Camera Cam(Ray(Point(0, 0, 0), Vector(0, 1, 0)), Vector(0, 0, 1), 2, 3, 3, cv::Size(1280, 1280));
+  Point CameraPosition(0, -1, 2);
+  Point CenterOfScene(0, 0, 0);
+  Vector CameraDirection(CameraPosition.FromThisToThat(CenterOfScene));
+  Vector Left(Vector(0, 1, 0).Cross(CameraDirection));
+  Vector Up(CameraDirection.Cross(Left));
+
+  Camera Cam(
+    Ray(CameraPosition + Point(0, 0, 3), CameraDirection), // Camera Ray
+    Up, // Up Direction
+    3, // Frame Distance
+    3, // Frame Width
+    3, // Frame Height
+    cv::Size(1280, 1280)); // Image Resolution
 
   Cam.Render(MasterScene);
 
