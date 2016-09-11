@@ -2,6 +2,8 @@
 #include "Collisions.h"
 #include "Scene.h"
 
+#include <cmath>
+
 Camera::Camera(
   Ray CameraRay,
   Vector UprightDir,
@@ -32,7 +34,7 @@ cv::Vec3b Camera::CastRay(Scene scene, Ray r)
   // If the ray intersected with any of them, find the closest point
   if (Intersections.size() != 0)
   {
-    Sphere ClosestSphere(Point(0,0,0),0,cv::Vec3b(0,0,0),Finish(0,0));
+    Sphere ClosestSphere(Point(0,0,0),0,cv::Vec3b(0,0,0),Finish(0,0,0,0));
     Point ClosestPoint(0, 0, 0);
     double ShortestDistance = std::numeric_limits<double>::max();
     for (auto& SpherePoint : Intersections)
@@ -59,8 +61,9 @@ cv::Vec3b Camera::CastRay(Scene scene, Ray r)
     // Compute diffuse component
     // Translate the intersection point to avoid precision errors
     cv::Vec3b DiffuseColor(0, 0, 0);
-    Vector SphereNormal = ClosestSphere.Normal(ClosestPoint);
-    ClosestPoint = ClosestPoint + (SphereNormal * 0.01);
+    cv::Vec3b SpecularColor(0, 0, 0);
+    Vector SphereNormal = SphereNormalAtPoint(ClosestSphere, ClosestPoint);
+    ClosestPoint = ClosestPoint.Translate(SphereNormal * 0.01);
     Vector PointToLight = ClosestPoint.FromThisToThat(scene.GetLightPosition()).Normalize();
     // Check to see if intersection point is on the same side as the light
     // And to make sure there is not another sphere in the way
@@ -68,17 +71,32 @@ cv::Vec3b Camera::CastRay(Scene scene, Ray r)
     if (DotProduct > 0)
     {
       Intersections = FindIntersectionPoints(scene.GetSphereList(), Ray(ClosestPoint, PointToLight));
+      // Need to account for when spheres are past the light
       if (Intersections.size() == 0)
       {
-        cv::Vec3d& SceneDif = scene.GetLightColor();
+        cv::Vec3d& LightColor = scene.GetLightColor();
         DiffuseColor = ClosestSphere.Color * ClosestSphere.Fin.Diffuse;
-        DiffuseColor[0] *= DotProduct * SceneDif[0];
-        DiffuseColor[1] *= DotProduct * SceneDif[1];
-        DiffuseColor[2] *= DotProduct * SceneDif[2];
+        DiffuseColor[0] *= DotProduct * LightColor[0];
+        DiffuseColor[1] *= DotProduct * LightColor[1];
+        DiffuseColor[2] *= DotProduct * LightColor[2];
+
+        // Compute the specular light contribution
+        Vector ReflectionVector = PointToLight - (SphereNormal * (2 * DotProduct));
+        Vector ViewDirection = r.Location.FromThisToThat(ClosestPoint).Normalize();
+        double SpecIntensity = ReflectionVector.Dot(ViewDirection);
+        if (SpecIntensity > 0)
+        {
+          double Multiplier = 
+            ClosestSphere.Fin.Specular *
+            std::pow(SpecIntensity, 1 / ClosestSphere.Fin.Roughness);
+          SpecularColor[0] = Multiplier * LightColor[0] * 255;
+          SpecularColor[1] = Multiplier * LightColor[1] * 255;
+          SpecularColor[2] = Multiplier * LightColor[2] * 255;
+        }
       }
     }
 
-    ReturnColor = SphereAmbientColor + DiffuseColor;
+    ReturnColor = SphereAmbientColor + DiffuseColor + SpecularColor;
   }
 
   return ReturnColor;
@@ -92,7 +110,7 @@ void Camera::Render(Scene scene)
   Vector UpUnit = UprightDir.Normalize();
   UpperLeftCorner = UpperLeftCorner.Translate(UpUnit*(Height / 2)); // Currently in top center of frame
   // Compute the perpendicular, leftward facing vector and move the point to the upper left corner
-  Vector LeftUnit = UprightDir.Cross(CameraRay.Direction).Normalize();
+  Vector LeftUnit = UprightDir.Cross(CameraRay.Direction).Normalize() * -1;
   UpperLeftCorner = UpperLeftCorner.Translate(LeftUnit*(Width / 2));
 
   Vector HorzInc = LeftUnit * (-1 * Width/ static_cast<double>(Resolution.width)); // Progress to the right
