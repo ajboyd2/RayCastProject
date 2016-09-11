@@ -47,7 +47,16 @@ cv::Vec3b Camera::CastRay(Scene scene, Ray r)
     }
   }
 
-  return ReturnColor.mul(scene.GetAmbientLightColor());
+  if (ReturnColor != cv::Vec3b(255, 255, 255))
+  {
+    cv::Vec3b Amb = scene.GetAmbientLightColor();
+
+    ReturnColor[0] *= static_cast<double>(Amb[0]) / 255;
+    ReturnColor[1] *= static_cast<double>(Amb[1]) / 255;
+    ReturnColor[2] *= static_cast<double>(Amb[2]) / 255;
+  }
+
+  return ReturnColor;
 }
 
 void Camera::Render(Scene scene)
