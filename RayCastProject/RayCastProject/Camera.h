@@ -18,7 +18,7 @@ public:
     
   ~Camera();
 
-  static bool CastRay(std::vector<Sphere> SphereList, Ray r);
+  static cv::Vec3b CastRay(std::vector<Sphere> SphereList, Ray r);
 
   void Render(std::vector<Sphere> SphereList);
   

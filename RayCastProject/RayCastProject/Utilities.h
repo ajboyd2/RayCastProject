@@ -89,7 +89,7 @@ struct Ray
 
 struct Sphere
 {
-  Sphere(Point cen, double radius);
+  Sphere(Point cen, double radius, cv::Vec3b col);
 
   ~Sphere();
 
@@ -101,6 +101,7 @@ struct Sphere
 
   Point Center;
   double Radius;
+  cv::Vec3b Color;
 };
 
 struct SpherePoint

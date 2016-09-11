@@ -192,9 +192,10 @@ bool Ray::operator==(Ray Other)
 //-------------------------------------------------------------------
 // Sphere -----------------------------------------------------------
 //-------------------------------------------------------------------
-Sphere::Sphere(Point cen, double radius)
+Sphere::Sphere(Point cen, double radius, cv::Vec3b col)
   : Center(cen),
-  Radius(radius)
+  Radius(radius),
+  Color(col)
 {
 }
 
