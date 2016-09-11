@@ -42,7 +42,7 @@ cv::Vec3b Camera::CastRay(Scene scene, Ray r)
       if (TempDist < ShortestDistance)
       {
         ShortestDistance = TempDist;
-        ReturnColor = S.Color;
+        ReturnColor = S.Color * S.Fin.Ambient;
       }
     }
   }
