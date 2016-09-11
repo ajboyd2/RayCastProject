@@ -32,6 +32,8 @@ cv::Vec3b Camera::CastRay(Scene scene, Ray r)
   // If the ray intersected with any of them, find the closest point
   if (Intersections.size() != 0)
   {
+    Sphere ClosestSphere(Point(0,0,0),0,cv::Vec3b(0,0,0),Finish(0,0));
+    Point ClosestPoint(0, 0, 0);
     double ShortestDistance = std::numeric_limits<double>::max();
     for (auto& SpherePoint : Intersections)
     {
@@ -42,18 +44,41 @@ cv::Vec3b Camera::CastRay(Scene scene, Ray r)
       if (TempDist < ShortestDistance)
       {
         ShortestDistance = TempDist;
-        ReturnColor = S.Color * S.Fin.Ambient;
+        ClosestSphere = S;
+        ClosestPoint = P;
       }
     }
-  }
 
-  if (ReturnColor != cv::Vec3b(255, 255, 255))
-  {
-    cv::Vec3b Amb = scene.GetAmbientLightColor();
+    // Compute ambient component
+    cv::Vec3d& SceneAmb = scene.GetAmbientLightColor();
+    cv::Vec3b SphereAmbientColor = ClosestSphere.Color * ClosestSphere.Fin.Ambient;
+    SphereAmbientColor[0] *= SceneAmb[0];
+    SphereAmbientColor[1] *= SceneAmb[1];
+    SphereAmbientColor[2] *= SceneAmb[2];
 
-    ReturnColor[0] *= static_cast<double>(Amb[0]) / 255;
-    ReturnColor[1] *= static_cast<double>(Amb[1]) / 255;
-    ReturnColor[2] *= static_cast<double>(Amb[2]) / 255;
+    // Compute diffuse component
+    // Translate the intersection point to avoid precision errors
+    cv::Vec3b DiffuseColor(0, 0, 0);
+    Vector SphereNormal = ClosestSphere.Normal(ClosestPoint);
+    ClosestPoint = ClosestPoint + (SphereNormal * 0.01);
+    Vector PointToLight = ClosestPoint.FromThisToThat(scene.GetLightPosition()).Normalize();
+    // Check to see if intersection point is on the same side as the light
+    // And to make sure there is not another sphere in the way
+    double DotProduct = PointToLight.Dot(SphereNormal);
+    if (DotProduct > 0)
+    {
+      Intersections = FindIntersectionPoints(scene.GetSphereList(), Ray(ClosestPoint, PointToLight));
+      if (Intersections.size() == 0)
+      {
+        cv::Vec3d& SceneDif = scene.GetLightColor();
+        DiffuseColor = ClosestSphere.Color * ClosestSphere.Fin.Diffuse;
+        DiffuseColor[0] *= DotProduct * SceneDif[0];
+        DiffuseColor[1] *= DotProduct * SceneDif[1];
+        DiffuseColor[2] *= DotProduct * SceneDif[2];
+      }
+    }
+
+    ReturnColor = SphereAmbientColor + DiffuseColor;
   }
 
   return ReturnColor;
