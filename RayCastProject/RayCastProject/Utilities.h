@@ -6,6 +6,8 @@ struct Point;
 struct Vector;
 struct Ray;
 struct Sphere;
+struct SpherePoint;
+struct Finish;
 
 struct Point
 {
@@ -91,7 +93,7 @@ struct Ray
 
 struct Sphere
 {
-  Sphere(Point cen, double radius, cv::Vec3b col);
+  Sphere(Point cen, double radius, cv::Vec3b col, Finish fin);
 
   ~Sphere();
 
@@ -104,6 +106,7 @@ struct Sphere
   Point Center;
   double Radius;
   cv::Vec3b Color;
+  Finish Fin;
 };
 
 struct SpherePoint
@@ -114,4 +117,15 @@ struct SpherePoint
 
   Sphere s;
   Point p;
+};
+
+struct Finish
+{
+  Finish(double Ambient);
+
+  ~Finish();
+  
+  bool operator==(Finish Other);
+
+  double Ambient;
 };

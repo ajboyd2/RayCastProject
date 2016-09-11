@@ -192,10 +192,11 @@ bool Ray::operator==(Ray Other)
 //-------------------------------------------------------------------
 // Sphere -----------------------------------------------------------
 //-------------------------------------------------------------------
-Sphere::Sphere(Point cen, double radius, cv::Vec3b col)
+Sphere::Sphere(Point cen, double radius, cv::Vec3b col, Finish fin)
   : Center(cen),
   Radius(radius),
-  Color(col)
+  Color(col),
+  Fin(fin)
 {
 }
 
@@ -215,11 +216,14 @@ void Sphere::Move(double x, double y, double z)
 
 bool Sphere::operator==(Sphere Other)
 {
-  return Center == Other.Center && Radius == Other.Radius;
+  return Center == Other.Center && 
+    Radius == Other.Radius && 
+    Color == Other.Color && 
+    Fin == Other.Fin;
 }
 
 //-------------------------------------------------------------------
-// SpherePoint -----------------------------------------------------------
+// SpherePoint ------------------------------------------------------
 //-------------------------------------------------------------------
 SpherePoint::SpherePoint(Sphere s, Point p)
   : s(s),
@@ -229,4 +233,21 @@ SpherePoint::SpherePoint(Sphere s, Point p)
 
 SpherePoint::~SpherePoint()
 {
+}
+
+//-------------------------------------------------------------------
+// Finish -----------------------------------------------------------
+//-------------------------------------------------------------------
+Finish::Finish(double Ambient)
+  : Ambient(Ambient)
+{
+}
+
+Finish::~Finish()
+{
+}
+
+bool Finish::operator==(Finish Other)
+{
+  return Ambient == Other.Ambient;
 }
